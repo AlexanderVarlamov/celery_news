@@ -6,6 +6,7 @@ version
 @time 10:50
 """
 from sqlalchemy import Column, BigInteger, TIMESTAMP, JSON, Integer, String, Boolean
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase
 
 
@@ -18,14 +19,14 @@ class NewsLinks(Base):
 
     id = Column(BigInteger, primary_key=True)
     dt = Column(TIMESTAMP, nullable=False)
-    links = Column(JSON, nullable=False)
+    links = Column(JSONB, nullable=False)
 
 
-class RssSources(Base):
+class RssSource(Base):
     __tablename__ = "rss_sources"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     rss = Column(String, nullable=False)
     description = Column(String, nullable=True)
     is_active = Column(Boolean, nullable=False, default=True)

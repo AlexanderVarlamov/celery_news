@@ -5,8 +5,8 @@ version
 @date 24.11.2023
 @time 14:04
 """
-from celery_test import test
+from celery_apps.celery_app import periodical_insert
 
 print("start")
-test.delay("hello")
+periodical_insert.delay()
 print("finish")
