@@ -1,17 +1,8 @@
-import asyncio
 from typing import Dict
 
 from controllers.actions import get_news_list
-from database.db_actions import get_sources, insert_news
+from database.db_actions import get_sources_from_db
 from models.models import RssSource
-
-
-# def get_sources(lst: list[str]):
-#     if lst == ['all']:
-#         news_to_get = sources.keys()
-#     else:
-#         news_to_get = [item for item in lst if item in sources.keys()]
-#     return news_to_get
 
 
 async def process_raw_news_request(sources_list: list[RssSource]) -> Dict:
@@ -25,7 +16,6 @@ async def process_raw_news_request(sources_list: list[RssSource]) -> Dict:
 
 
 async def get_json() -> Dict:
-    sources = await get_sources()
+    sources = await get_sources_from_db()
     news = await process_raw_news_request(sources)
     return news
-

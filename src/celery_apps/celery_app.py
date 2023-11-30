@@ -29,6 +29,7 @@ def setup_periodic_tasks(sender, **kwargs):
 async def insert_to_base():
     result = await get_json()
     await insert_news(result)
+    return result
 
 
 @celery_app.task
@@ -36,4 +37,5 @@ def periodical_insert():
     import platform
     if platform.system() == 'Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    asyncio.run(insert_to_base())
+    jsn = asyncio.run(insert_to_base())
+    return jsn

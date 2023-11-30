@@ -5,22 +5,32 @@ version
 @date 27.11.2023
 @time 16:53
 """
-import asyncio
 import json
+from asyncio import sleep
 from datetime import datetime
 from typing import List, Dict
 
+from aiocache import cached, Cache
 from sqlalchemy import select, insert
 
 from database.connections import async_session_maker
 from models.models import RssSource, NewsLinks
 
 
-async def get_sources() -> List[RssSource]:
+@cached(ttl=10, cache=Cache.MEMORY)
+async def get_sources_from_db() -> List[RssSource]:
     async with async_session_maker() as session:
         query = select(RssSource).where(RssSource.is_active)
         result = await session.execute(query)
-        return result.scalars()
+        return list(result.scalars())
+
+
+@cached(ttl=10, cache=Cache.MEMORY)
+async def get_number():
+    import random as r
+    number = r.randint(0, 100)
+    await sleep(5)
+    return number
 
 
 async def insert_news(news_dict: Dict):
@@ -39,6 +49,5 @@ async def get_news():
         print(type(res0.links))
         et = json.loads(res0.links)
         print(type(et))
-
 
 # asyncio.run(get_news())

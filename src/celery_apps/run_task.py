@@ -8,5 +8,6 @@ version
 from celery_apps.celery_app import periodical_insert
 
 print("start")
-periodical_insert.delay()
+res = periodical_insert.delay()
+print(res.get())
 print("finish")
